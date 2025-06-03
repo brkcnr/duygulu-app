@@ -1,0 +1,8 @@
+transformers>=4.40.1
+torch>=2.2.0
+pandas
+datasets
+scikit-learn
+matplotlib
+accelerate>=0.21.0
+# Optional dependencies for specific functionalities

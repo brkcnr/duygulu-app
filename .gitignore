@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+results/
+logs/
+*.pt
+*.bin
+*.safetensors
+data/boun_sentiment.csv
+.ipynb_checkpoints/
+*.log
