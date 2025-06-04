@@ -12,8 +12,8 @@ label_map_text = {"Negative": 0, "Notr": 1, "Positive": 2}
 if df["label"].dtype == object:
     df["label"] = df["label"].map(label_map_text)
 
-# Test için rastgele 10 örnek seç
-df = df.sample(10, random_state=42).reset_index(drop=True)
+# Test için rastgele 20 örnek seç
+df = df.sample(20, random_state=42).reset_index(drop=True)
 
 # Sınıflandırma başlasın
 for i in range(len(df)):

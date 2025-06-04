@@ -3,7 +3,7 @@ import torch
 
 tokenizer = AutoTokenizer.from_pretrained("dbmdz/distilbert-base-turkish-cased")
 
-model = AutoModelForSequenceClassification.from_pretrained("./results/checkpoint-4000")
+model = AutoModelForSequenceClassification.from_pretrained("./results/checkpoint-120000")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)

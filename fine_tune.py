@@ -11,6 +11,9 @@ df = pd.read_csv("data/train.csv")
 label_map = {"Negative": 0, "Notr": 1, "Positive": 2}
 df["label"] = df["label"].map(label_map)
 
+# ✅ Stratified örnekleme: her sınıftan yaklaşık 33.333 satır
+df = df.groupby("label", group_keys=False).apply(lambda x: x.sample(33333, random_state=42))
+
 # 🔀 Eğitim ve doğrulama seti
 train_df, val_df = train_test_split(df, test_size=0.2, stratify=df["label"], random_state=42)
 
