@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tahmin Geçmişi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+<div class="max-w-5xl mx-auto mt-10 p-6 bg-white shadow rounded-lg">
+    <h1 class="text-2xl font-bold mb-6 text-center">Tahmin Geçmişi</h1>
+
+    <!-- Arama ve filtre -->
+    <form method="get" class="mb-6 flex flex-wrap items-center gap-3">
+        <input type="text" name="q" value="{{ q }}" placeholder="Metin ara..." class="border rounded p-2 flex-1">
+
+        <select name="label" class="border rounded p-2">
+            <option value="">Tüm Tahminler</option>
+            <option value="Pozitif" {% if label == "Pozitif" %}selected{% endif %}>Pozitif</option>
+            <option value="Nötr" {% if label == "Nötr" %}selected{% endif %}>Nötr</option>
+            <option value="Negatif" {% if label == "Negatif" %}selected{% endif %}>Negatif</option>
+        </select>
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Filtrele</button>
+    </form>
+
+    <div class="overflow-x-auto">
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="bg-gray-200 text-left">
+                    <th class="p-2">ID</th>
+                    <th class="p-2">Metin</th>
+                    <th class="p-2">Tahmin</th>
+                    <th class="p-2">Negatif</th>
+                    <th class="p-2">Nötr</th>
+                    <th class="p-2">Pozitif</th>
+                    <th class="p-2">Sil</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in predictions %}
+                <tr class="border-b hover:bg-gray-100">
+                    <td class="p-2">{{ item.id }}</td>
+                    <td class="p-2">{{ item.text }}</td>
+                    <td class="p-2 font-semibold
+                        {% if item.prediction == 'Pozitif' %}text-green-600
+                        {% elif item.prediction == 'Negatif' %}text-red-600
+                        {% else %}text-gray-600{% endif %}">
+                        {{ item.prediction }}
+                    </td>
+                    <td class="p-2 text-sm">{{ item.prob_neg }}</td>
+                    <td class="p-2 text-sm">{{ item.prob_neu }}</td>
+                    <td class="p-2 text-sm">{{ item.prob_pos }}</td>
+                    <td class="p-2">
+                        <form method="post" action="/sil/{{ item.id }}">
+                            <button type="submit" class="text-red-600 hover:underline text-sm">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-center mt-6 flex-wrap gap-2">
+        {% if page > 1 %}
+            <a href="/result?page={{ page - 1 }}&q={{ q }}&label={{ label }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">← Önceki</a>
+        {% endif %}
+
+        {% for p in range(1, total_pages + 1) %}
+            <a href="/result?page={{ p }}&q={{ q }}&label={{ label }}"
+               class="px-3 py-1 rounded {{ 'bg-blue-600 text-white' if p == page else 'bg-gray-200 hover:bg-gray-300' }}">
+               {{ p }}
+            </a>
+        {% endfor %}
+
+        {% if page < total_pages %}
+            <a href="/result?page={{ page + 1 }}&q={{ q }}&label={{ label }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Sonraki →</a>
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-8">
+        <a href="/" class="text-blue-600 hover:underline">← Ana Sayfaya Dön</a>
+    </div>
+</div>
+</body>
+</html>

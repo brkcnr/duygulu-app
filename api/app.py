@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi import Query
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from sqlalchemy.orm import Session
@@ -62,3 +64,49 @@ def predict_api(input: InputText, db: Session = Depends(get_db)):
 @app.get("/", response_class=HTMLResponse)
 def get_form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/result", response_class=HTMLResponse)
+def list_predictions(
+    request: Request,
+    db: Session = Depends(get_db),
+    page: int = Query(1, ge=1),
+    q: str = Query("", alias="q"),
+    label: str = Query("", alias="label")
+):
+    page_size = 10
+    offset = (page - 1) * page_size
+
+    query = db.query(Prediction)
+
+    if q:
+        query = query.filter(Prediction.text.ilike(f"%{q}%"))
+    if label:
+        query = query.filter(Prediction.prediction == label)
+
+    total = query.count()
+    predictions = (
+        query.order_by(Prediction.id.desc())
+        .offset(offset)
+        .limit(page_size)
+        .all()
+    )
+
+    total_pages = (total + page_size - 1) // page_size
+
+    return templates.TemplateResponse("result.html", {
+        "request": request,
+        "predictions": predictions,
+        "page": page,
+        "total_pages": total_pages,
+        "q": q,
+        "label": label
+    })
+    
+# Tahmin silme
+@app.post("/sil/{prediction_id}")
+def delete_prediction(prediction_id: int, db: Session = Depends(get_db)):
+    record = db.query(Prediction).get(prediction_id)
+    if record:
+        db.delete(record)
+        db.commit()
+    return RedirectResponse(url="/result", status_code=303)
