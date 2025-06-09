@@ -9,3 +9,4 @@ data/boun_sentiment.csv
 .ipynb_checkpoints/
 *.log
 db/init_db.py
+value_count.py

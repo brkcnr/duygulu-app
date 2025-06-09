@@ -3,6 +3,20 @@ from datasets import Dataset
 from sklearn.model_selection import train_test_split
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 import torch
+import torch.nn as nn
+
+# Özel Trainer sınıfı (compute_loss override edildi)
+class CustomTrainer(Trainer):
+    def compute_loss(self, model, inputs, return_outputs=False):
+        labels = inputs.pop("labels")
+        outputs = model(**inputs)
+        logits = outputs.logits
+
+        class_weights = torch.tensor([1.0, 2.5, 1.0]).to(logits.device)  # Notr ağırlığı artırıldı
+        loss_fct = nn.CrossEntropyLoss(weight=class_weights)
+        loss = loss_fct(logits, labels)
+
+        return (loss, outputs) if return_outputs else loss
 
 # CSV Yolu
 df = pd.read_csv("data/train.csv")
@@ -15,8 +29,8 @@ df["label"] = df["label"].map(label_map)
 df = df.groupby("label", group_keys=False).apply(lambda x: x.sample(33333, random_state=42))
 
 # Eğitim ve doğrulama seti
+df["labels"] = df["label"]
 train_df, val_df = train_test_split(df, test_size=0.2, stratify=df["label"], random_state=42)
-
 train_dataset = Dataset.from_pandas(train_df)
 val_dataset = Dataset.from_pandas(val_df)
 
@@ -40,8 +54,8 @@ def tokenize(batch):
 train_dataset = train_dataset.map(tokenize, batched=True)
 val_dataset = val_dataset.map(tokenize, batched=True)
 
-train_dataset.set_format("torch", columns=["input_ids", "attention_mask", "label"])
-val_dataset.set_format("torch", columns=["input_ids", "attention_mask", "label"])
+train_dataset.set_format("torch", columns=["input_ids", "attention_mask", "labels"])
+val_dataset.set_format("torch", columns=["input_ids", "attention_mask", "labels"])
 
 # Eğitim Parametreleri
 training_args = TrainingArguments(
@@ -59,7 +73,7 @@ training_args = TrainingArguments(
 )
 
 # Trainer
-trainer = Trainer(
+trainer = CustomTrainer(
     model=model,
     args=training_args,
     train_dataset=train_dataset,
