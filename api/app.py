@@ -17,7 +17,7 @@ templates = Jinja2Templates(directory="api/templates")
 app.mount("/static", StaticFiles(directory="api/static"), name="static")
 
 # Model ve tokenizer yükle
-model_path = "./results/checkpoint-120000"
+model_path = "./results/checkpoint-80000"
 tokenizer = AutoTokenizer.from_pretrained("dbmdz/distilbert-base-turkish-cased")
 model = AutoModelForSequenceClassification.from_pretrained(model_path)
 model.eval()
@@ -51,8 +51,6 @@ def predict_api(input: InputText, db: Session = Depends(get_db)):
     )
     db.add(record)
     db.commit()
-
-    print(f"✔ Tahmin kaydedildi (API): id={record.id}, prediction={record.prediction}")
 
     return {
         "text": input.text,
