@@ -5,4 +5,11 @@ datasets
 scikit-learn
 matplotlib
 accelerate>=0.21.0
+uvicorn[standard]
+python-dotenv
+fastapi
+sqlalchemy
+psycopg2-binary
+jinja2
+python-multipart
 # Optional dependencies for specific functionalities

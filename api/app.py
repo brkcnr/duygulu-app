@@ -1,15 +1,18 @@
-from fastapi import FastAPI, Request, Depends
-from fastapi.responses import HTMLResponse
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI, Request, Depends, Query
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi import Query
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from sqlalchemy.orm import Session
 from api.db.db import get_db
 from api.db.models import Prediction
+from api.db.base import Base
+from api.db.db import engine
 import torch
+
+# Veritabanı tablolarını oluştur
+Base.metadata.create_all(bind=engine)
 
 # FastAPI uygulamasını başlat
 app = FastAPI()

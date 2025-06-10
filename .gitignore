@@ -10,3 +10,4 @@ data/boun_sentiment.csv
 *.log
 db/init_db.py
 value_count.py
+.env

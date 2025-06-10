@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+.env
+.env.*
+.git
+.gitignore
+logs/
+results/
+!results/checkpoint-80000/**
+checkpoints/
+*.pt
+*.log
+.DS_Store
