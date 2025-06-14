@@ -11,3 +11,4 @@ data/boun_sentiment.csv
 db/init_db.py
 value_count.py
 .env
+vram_test.py
