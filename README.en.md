@@ -89,6 +89,5 @@ duygulu-app/
 ├── Dockerfile          # Docker configuration
 ├── fine_tune.py        # Model fine-tuning code
 ├── main.py             # Test scripts
-├── requirements.txt    # Python dependencies
-└── vram_test.py        # Test file for your GPU
+└── requirements.txt    # Python dependencies
 ```

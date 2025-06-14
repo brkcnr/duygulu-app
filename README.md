@@ -89,6 +89,5 @@ duygulu-app/
 ├── Dockerfile          # Docker yapılandırması
 ├── fine_tune.py        # Model ince ayar kodu
 ├── main.py             # Test betikleri
-├── requirements.txt    # Python bağımlılıkları
-└── vram_test.py        # GPU test dosyası
+└── requirements.txt    # Python bağımlılıkları
 ```
