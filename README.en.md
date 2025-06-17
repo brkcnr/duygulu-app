@@ -42,7 +42,12 @@ Duygulu-App is a web application developed for sentiment analysis of Turkish tex
    cd duygulu-app
    ```
 
-2. Create a .env file:
+2. Train the model using a dataset available in the repository or one of your own choosing(Don't forget to change .csv path)
+   ```bash
+   python fine_tune.py
+   ```
+
+3. Create a .env file:
    ```bash
    cp .env.example .env
    ```
@@ -54,12 +59,12 @@ Duygulu-App is a web application developed for sentiment analysis of Turkish tex
    POSTGRES_DB=DB_NAME
    ```
 
-3. Start the application with Docker:
+4. Start the application with Docker:
    ```bash
    docker-compose up -d
    ```
 
-4. The application will start running at http://localhost:8000.
+5. The application will start running at http://localhost:8000.
 
 ## Usage
 

@@ -42,7 +42,12 @@ Duygulu-App, Türkçe metinlerin duygu analizi için geliştirilmiş bir web uyg
    cd duygulu-app
    ```
 
-2. .env dosyasını oluşturun:
+2. Repo'da bulunan veya kendi seçtiğiniz dataset ile modeli eğitin(.csv dizinini değiştirmeyi unutmayın):
+   ```bash
+   python fine_tune.py
+   ```
+
+3. .env dosyasını oluşturun:
    ```bash
    cp .env.example .env
    ```
@@ -54,12 +59,12 @@ Duygulu-App, Türkçe metinlerin duygu analizi için geliştirilmiş bir web uyg
    POSTGRES_DB=VERİTABANI_İSMİ
    ```
 
-3. Docker ile uygulamayı başlatın:
+4. Docker ile uygulamayı başlatın:
    ```bash
    docker-compose up -d
    ```
 
-4. Uygulama http://localhost:8000 adresinde çalışmaya başlayacaktır.
+5. Uygulama http://localhost:8000 adresinde çalışmaya başlayacaktır.
 
 ## Kullanım
 
